@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <title>Generador de UMLS de clases</title>
+    <script type="text/javascript">
+
+      /*window.onload = function() {
+        var canvas = document.getElementById("linea1");
+          if (canvas && canvas.getContext) {
+          var ctx = canvas.getContext("2d");
+            if (ctx) {
+              ctx.lineWidth = 3;
+              ctx.strokeStyle = "#11131A";
+              ctx.beginPath();
+              ctx.moveTo(90, 130);
+              ctx.lineTo(90, 20);
+              ctx.stroke();
+            }
+          }
+      }*/
+
+      function draw() {
+        var canvas = document.getElementById("linea1");
+        if (canvas.getContext){
+          var ctx = canvas.getContext("2d");
+          var ctx2 = canvas.getContext("2d");
+
+          // Triángulo rellenado
+          ctx.beginPath();
+          ctx.moveTo(82,0);
+          ctx.lineTo(95,10);
+          ctx.lineTo(70,10);
+          ctx.fill();
+
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = "#11131A";
+          ctx.beginPath();
+          ctx.moveTo(82, 150);
+          ctx.lineTo(82, 10);
+          ctx.stroke();
+
+
+        /*  // Triángulo contorneado
+          ctx.beginPath();
+          ctx.moveTo(125,125);
+          ctx.lineTo(125,45);
+          ctx.lineTo(45,125);
+          ctx.closePath();
+          ctx.stroke();*/
+        }
+      }
+    </script>
+
+    <style type="text/css">
+      textarea {
+        resize: none;
+      }
+
+      #uml {
+        border-style: solid;
+        height: 509px;
+        overflow: auto;
+      }
+
+      #main {
+        padding-top: 75px;
+      }
+
+      #error {
+         color: red;
+      }
+
+    </style>
+
+
+  </head>
+  <body onload="draw();">
+
+    <div class="container" id="main">
+      <div class="row">
+        <div class="col-12 col-md-8">
+
+          {% if error %}
+            <p id="error">No pudimos procesar el codigo, porque no hay nada en la caja de texto.</p>
+          {% endif %}
+          <form action="/procesar/" method="get">
+            <textarea name="textarea" rows="25" cols="100">{% if not error%}{{text}}{%endif%}
+            </textarea>
+            <center><input type="submit" value="Procesar"></center>
+          </form>
+
+
+
+        </div>
+
+        <div class="col-6 col-md-4" id="uml">
+
+            {%if not error%}
+            <center>
+            <table border="collapse">
+              <tr>
+                <td bgcolor="yellow"><strong><center><h3>Class {{clase}}</h3></center></strong></td>
+              </tr>
+
+              <tr>
+                <td bgcolor="silver"><strong><center>Atributos</center></strong></td>
+              </tr>
+
+                {%for atri in atribu%}
+              <tr>
+                <td>->Private {{atri}}</td>
+              </tr>
+                {%endfor%}
+
+              <tr>
+                <td bgcolor="silver"><strong><center>Metodos</center></strong></td>
+              </tr>
+              <tr>
+                <td>->void setNombres()</td>
+              </tr>
+              <tr>
+                <td>->void setApellidos()</td>
+              </tr>
+            </table>
+          </center>
+            {% endif%}
+
+            <!--<center><canvas id="linea1" width="140" height="100">Su navegador no soporta canvas :( </canvas></center> -->
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
