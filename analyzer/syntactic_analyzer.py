@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lex_analyzer import *
-# from lex_analyzer import analyzer
+
 
 # resultado del analisis
 resultado_gramatica = []
