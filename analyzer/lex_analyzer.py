@@ -146,7 +146,7 @@ class Lexer:
                 break
 
             tokenObj = Token(tok.lineno, tok.type, tok.value, tok.lexpos)
-            resultado_lexema.append(tokenObj.__dict__)
+            resultado_lexema.append(tokenObj)
 
         return resultado_lexema
 

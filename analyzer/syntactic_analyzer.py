@@ -1,6 +1,12 @@
+import sys
+sys.path.append("..")
+import json
 import ply.yacc as yacc
 from lex_analyzer import *
-
+from models.MainClass import *
+from models.Attribute import *
+from models.Method import *
+from models.ResponseClass import *
 
 # resultado del analisis
 resultado_gramatica = []
@@ -44,7 +50,7 @@ def p_class_syntax(t):
 def p_error(t):
     global resultado_gramatica
     if t:
-        resultado = "Error sintactico de tipo {} cerca del valor {}".format( str(t.type),str(t.value))
+        resultado = "Error sintactico en Linea {} Posicion {} de Tipo {} cerca del Valor {}".format(str(t.lineno),str(t.lexpos),str(t.type),str(t.value))
         #print(resultado)
     else:
         resultado = "Token No identificado"
@@ -63,45 +69,88 @@ class Analyzer:
     def testSyntacticResult(self):
         global resultado_gramatica
         resultado_gramatica.clear()
-
+        itemNotValid = 0
         for item in self.data.splitlines():
             if item:
                 gram = parser.parse(item)
                 if gram:
                     resultado_gramatica.append(str(gram))
             else:
-                print("Item vacio")
+                itemNotValid += 1
 
         #print("result: ", resultado_gramatica)
         return resultado_gramatica
 
     def getData(self):
-        resultSyntactic = self.testSyntacticResult()
-        isValid = True
-        if len(resultSyntactic) > 0:
-            for item in resultSyntactic:
-                if item == "True":
-                    isValid = True
+        try:
+            resultSyntactic = self.testSyntacticResult()
+            isValid = True
+            responseObj = ResponseClass()
+            if len(resultSyntactic) > 0:
+                for item in resultSyntactic:
+                    if item == "True":
+                        isValid = True
+                    else:
+                        isValid = False
+                        break
+
+                # If syntactic grammar is correct then get the token by lexical function
+                if isValid:
+                    lexerObj = Lexer
+                    lexResult = lexerObj.testLexResult(self.data)
+                    classObj = MainClass()
+                    responseObj.success = True
+                    responseObj.message = "La sintaxis es valida"
+                    idx = 0
+                    # Iterate all tokens and get the necessary token for the response
+                    for token in lexResult:
+                        # Get the class name on lex array
+                        if token.type == "LLAIZQ":
+                            classObj.name = lexResult[idx - 1].value
+                        # Get the attribute information
+                        if token.type == "PUNTOCOMA" and lexResult[idx - 1].type == "IDENTIFICADOR":
+                            attrName = lexResult[idx - 1].value
+                            attrType = lexResult[idx - 2].value
+                            attrScope = lexResult[idx - 3].value
+                            attrObj = Attribute(attrScope, attrType, attrName)
+                            classObj.lstAttributes.append(attrObj)
+
+                        # Get the method information
+                        if token.type == "PARIZQ" and lexResult[idx + 1].type == "PARDER":
+                            methodName = lexResult[idx - 1].value
+                            methodType = lexResult[idx - 2].value
+                            methodScope = lexResult[idx - 3].value
+                            methodObj = Method(methodScope, methodType, methodName)
+                            classObj.lstMethods.append(methodObj)
+
+                        # To know when the class has finished and set the Class object on list
+                        if token.type == "LLADER":
+                            responseObj.lstClasses.append(classObj)
+                            classObj = MainClass()
+
+                        idx += 1
+
+                    # print(classObj.name)
+                    # for attr in classObj.lstAttributes:
+                    #     print(attr.__dict__)
+                    # for method in classObj.lstMethods:
+                    #     print(method.__dict__)
                 else:
-                    isValid = False
-                    break
-
-            print(isValid)
-            # If syntactic grammar is correct then get the token by lexical function
-            if isValid:
-                lexerObj = Lexer
-                lexResult = lexerObj.testLexResult(self.data)
-                print(lexResult)
-                # Iterate all tokens and get the necessary token for the response
-                for token in lexResult:
-                    print(token)
-
+                    # Get all message error
+                    resultSyntactic[:] = (value for value in resultSyntactic if value != "True")
+                    responseObj.success = False
+                    responseObj.message = "Error de sintaxis entonctrado"
+                    responseObj.lstSyntaxErros = resultSyntactic
             else:
-                # Get all message error
-                resultSyntactic[:] = (value for value in resultSyntactic if value != "True")
-                print(resultSyntactic)
+                responseObj.success = False
+                responseObj.message = "Ningun resultado que mostrar. No se ha encontrado ningun token valido."
 
+        except Exception as exc:
+            responseObj.success = False
+            responseObj.message = "Error al obtener los datos: " + str(exc)
 
+        return responseObj
+        #print(responseObj.message)
             # print(len(result_grammar))
             # print(result_grammar[0])
 
@@ -110,9 +159,10 @@ class Analyzer:
 if __name__ == '__main__':
     testFile = open("testGrammar.txt", "r")
     content = testFile.read()
-    print(content)
+    # print(content)
     objAnalyzer = Analyzer(content)
-    objAnalyzer.getData()
+    responseObj = objAnalyzer.getData()
+    print(responseObj)
     # while True:
     #     try:
     #         stringInput = input(' ingresa dato >>> ')
