@@ -1,0 +1,19 @@
+class Persona {
+    private String nombres;
+    private String apellidos;
+    private int edad;
+
+    public String getNombres();
+    public String getApellidos();
+    public int getEdad();
+}
+
+class Evaluacion {
+    private int nota1;
+    private int nota2;
+    private int nota3;
+
+    public int getNota1();
+    public int getNota2();
+    public int getNota3();
+}

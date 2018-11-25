@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^index/$',vistas.index),
     url(r'^procesar/$',vistas.procesar),
+
 ]

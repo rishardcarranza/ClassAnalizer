@@ -1,6 +1,11 @@
+import sys
+sys.path.append("..")
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from compiladores.forms import area
+from analyzer.syntacticAnalyzer import Analyzer
+import unicodedata
+
 
 
 def index(request):
@@ -16,8 +21,20 @@ def index(request):
 def procesar(request):
     if 'textarea' in request.GET and request.GET['textarea']:
         mensaje = request.GET['textarea']
-        atributos=["nombres","apellidos", "jhovany"]
-        return render(request, 'index.html', {'error': False, 'text':mensaje,'atribu': atributos, 'clase':'Persona' })
+
+        f=open ('parse.txt','w')
+        f.write(mensaje)
+        f.close()
+
+        testFile = open("parse.txt", "r")
+        content = testFile.read()
+
+        analizador=Analyzer(content)
+        object=analizador.getData()
+
+
+
+        return render(request, 'index.html', {'estado':object.success, 'text':mensaje, 'clases':object.lstClasses, })
     else:
         return render(request, 'index.html',{'error':True})
 

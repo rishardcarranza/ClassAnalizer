@@ -89,56 +89,57 @@
       <div class="row">
         <div class="col-12 col-md-8">
 
-          {% if error %}
+          {% if not estado %}
             <p id="error">No pudimos procesar el codigo, porque no hay nada en la caja de texto.</p>
           {% endif %}
           <form action="/procesar/" method="get">
-            <textarea name="textarea" rows="25" cols="100">{% if not error%}{{text}}{%endif%}
+            <textarea name="textarea" rows="25" cols="100">{% if estado%}{{text}}{%endif%}
             </textarea>
             <center><input type="submit" value="Procesar"></center>
           </form>
-
-
-
         </div>
 
         <div class="col-6 col-md-4" id="uml">
 
-            {%if not error%}
+            {%if estado%}
+
+          {%for dic in clases%}
             <center>
             <table border="collapse">
               <tr>
-                <td bgcolor="yellow"><strong><center><h3>Class {{clase}}</h3></center></strong></td>
+                <td bgcolor="yellow"><strong><center><h3>Class {{dic.name}}</h3></center></strong></td>
               </tr>
-
               <tr>
                 <td bgcolor="silver"><strong><center>Atributos</center></strong></td>
               </tr>
-
-                {%for atri in atribu%}
+              {%for atr in dic.lstAttributes%}
               <tr>
-                <td>->Private {{atri}}</td>
+                <td>->{{atr.scope}} {{atr.type}} {{atr.name}}</td>
               </tr>
-                {%endfor%}
+              {%endfor%}
 
               <tr>
                 <td bgcolor="silver"><strong><center>Metodos</center></strong></td>
               </tr>
+
+              {%for meto in dic.lstMethods%}
               <tr>
-                <td>->void setNombres()</td>
+                <td>->{{meto.scope}} {{meto.type}} {{meto.name}}()</td>
               </tr>
-              <tr>
-                <td>->void setApellidos()</td>
-              </tr>
+              {%endfor%}
             </table>
-          </center>
+            </center>
+           <br>
+            {%endfor%}
+
+
             {% endif%}
 
             <!--<center><canvas id="linea1" width="140" height="100">Su navegador no soporta canvas :( </canvas></center> -->
 
 
-        </div>
-      </div>
+
+
     </div>
 
 
