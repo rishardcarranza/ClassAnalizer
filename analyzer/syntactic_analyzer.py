@@ -76,11 +76,30 @@ class Analyzer:
         return resultado_gramatica
 
     def getData(self):
-        result_grammar = self.testSyntacticResult()
+        resultSyntactic = self.testSyntacticResult()
+        isValid = True
+        if len(resultSyntactic) > 0:
+            for item in resultSyntactic:
+                print(item)
+                if item == "True":
+                    isValid = True
+                else:
+                    isValid = False
+                    break
 
-        if len(result_grammar):
-            print(len(result_grammar))
-            print(result_grammar[0])
+            print(isValid)
+            # If syntactic grammar is correct then get the token by lexical function
+            if isValid:
+                lexerObj = Lexer
+                lexResult = lexerObj.testLexResult(self.data)
+                print(lexResult)
+            else:
+                print("Syntactic validation not valid...")
+
+
+            # print(len(result_grammar))
+            # print(result_grammar[0])
+
 
 
 if __name__ == '__main__':
