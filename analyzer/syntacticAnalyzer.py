@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 import json
 import ply.yacc as yacc
-from lex_analyzer import *
+from lexAnalyzer import *
 from models.MainClass import *
 from models.Attribute import *
 from models.Method import *
@@ -113,7 +113,7 @@ class Analyzer:
                             attrType = lexResult[idx - 2].value
                             attrScope = lexResult[idx - 3].value
                             attrObj = Attribute(attrScope, attrType, attrName)
-                            classObj.lstAttributes.append(attrObj)
+                            classObj.lstAttributes.append(attrObj.__dict__)
 
                         # Get the method information
                         if token.type == "PARIZQ" and lexResult[idx + 1].type == "PARDER":
@@ -121,11 +121,11 @@ class Analyzer:
                             methodType = lexResult[idx - 2].value
                             methodScope = lexResult[idx - 3].value
                             methodObj = Method(methodScope, methodType, methodName)
-                            classObj.lstMethods.append(methodObj)
+                            classObj.lstMethods.append(methodObj.__dict__)
 
                         # To know when the class has finished and set the Class object on list
                         if token.type == "LLADER":
-                            responseObj.lstClasses.append(classObj)
+                            responseObj.lstClasses.append(classObj.__dict__)
                             classObj = MainClass()
 
                         idx += 1
@@ -139,7 +139,7 @@ class Analyzer:
                     # Get all message error
                     resultSyntactic[:] = (value for value in resultSyntactic if value != "True")
                     responseObj.success = False
-                    responseObj.message = "Error de sintaxis entonctrado"
+                    responseObj.message = "Error de sintaxis encontrado"
                     responseObj.lstSyntaxErros = resultSyntactic
             else:
                 responseObj.success = False
@@ -161,8 +161,8 @@ if __name__ == '__main__':
     content = testFile.read()
     # print(content)
     objAnalyzer = Analyzer(content)
-    responseObj = objAnalyzer.getData()
-    print(responseObj)
+    responseObj = objAnalyzer.getData().__dict__
+    print(json.dumps(responseObj))
     # while True:
     #     try:
     #         stringInput = input(' ingresa dato >>> ')
