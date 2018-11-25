@@ -80,7 +80,6 @@ class Analyzer:
         isValid = True
         if len(resultSyntactic) > 0:
             for item in resultSyntactic:
-                print(item)
                 if item == "True":
                     isValid = True
                 else:
@@ -93,8 +92,14 @@ class Analyzer:
                 lexerObj = Lexer
                 lexResult = lexerObj.testLexResult(self.data)
                 print(lexResult)
+                # Iterate all tokens and get the necessary token for the response
+                for token in lexResult:
+                    print(token)
+
             else:
-                print("Syntactic validation not valid...")
+                # Get all message error
+                resultSyntactic[:] = (value for value in resultSyntactic if value != "True")
+                print(resultSyntactic)
 
 
             # print(len(result_grammar))
