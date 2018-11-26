@@ -114,7 +114,7 @@ class Analyzer:
                             attrType = lexResult[idx - 2].value
                             attrScope = lexResult[idx - 3].value
                             attrObj = Attribute(attrScope, attrType, attrName)
-                            classObj.lstAttributes.append(attrObj.__dict__)
+                            classObj.lstAttributes.append(attrObj)
 
                         # Get the method information
                         if token.type == "PARIZQ" and lexResult[idx + 1].type == "PARDER":
@@ -122,11 +122,11 @@ class Analyzer:
                             methodType = lexResult[idx - 2].value
                             methodScope = lexResult[idx - 3].value
                             methodObj = Method(methodScope, methodType, methodName)
-                            classObj.lstMethods.append(methodObj.__dict__)
+                            classObj.lstMethods.append(methodObj)
 
                         # To know when the class has finished and set the Class object on list
                         if token.type == "LLADER":
-                            responseObj.lstClasses.append(classObj.__dict__)
+                            responseObj.lstClasses.append(classObj)
                             classObj = MainClass()
 
                         idx += 1
@@ -162,8 +162,8 @@ if __name__ == '__main__':
     content = testFile.read()
     # print(content)
     objAnalyzer = Analyzer(content)
-    responseObj = objAnalyzer.getData().__dict__
-    print(json.dumps(responseObj))
+    responseObj = objAnalyzer.getData()
+    print(responseObj)
     # while True:
     #     try:
     #         stringInput = input(' ingresa dato >>> ')
