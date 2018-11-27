@@ -34,7 +34,7 @@ def procesar(request):
 
 
 
-        return render(request, 'index.html', {'estado':object.success, 'text':mensaje, 'clases':object.lstClasses, })
+        return render(request, 'index.html', {'estado':object.success, 'text':mensaje, 'clases':object.lstClasses, 'errores':object.lstSyntaxErros })
     else:
         return render(request, 'index.html',{'error':True})
 

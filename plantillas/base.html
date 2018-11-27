@@ -79,6 +79,10 @@
          color: red;
       }
 
+      table tr {
+         text-align: center;
+      }
+
     </style>
 
 
@@ -89,14 +93,17 @@
       <div class="row">
         <div class="col-12 col-md-8">
 
-          {% if not estado %}
-            <p id="error">No pudimos procesar el codigo, porque no hay nada en la caja de texto.</p>
-          {% endif %}
+
           <form action="/procesar/" method="get">
-            <textarea name="textarea" rows="25" cols="100">{% if estado%}{{text}}{%endif%}
-            </textarea>
+            <textarea name="textarea" rows="25" cols="100">{{text}}</textarea>
             <center><input type="submit" value="Procesar"></center>
           </form>
+
+          {% if not estado %}
+            {%for erro in errores%}
+              <p id="error">{{erro}}</p>
+            {%endfor%}
+          {% endif %}
         </div>
 
         <div class="col-6 col-md-4" id="uml">
@@ -114,7 +121,18 @@
               </tr>
               {%for atr in dic.lstAttributes%}
               <tr>
-                <td>->{{atr.scope}} {{atr.type}} {{atr.name}}</td>
+                <td>
+                  {%ifequal atr.scope "private"%}
+                  -
+                  {%endifequal%}
+                  {%ifequal atr.scope "public"%}
+                  +
+                  {%endifequal%}
+                  {%ifequal atr.scope "protected"%}
+                  #
+                  {%endifequal%}
+
+                  {{atr.type}} {{atr.name}}</td>
               </tr>
               {%endfor%}
 
@@ -124,7 +142,18 @@
 
               {%for meto in dic.lstMethods%}
               <tr>
-                <td>->{{meto.scope}} {{meto.type}} {{meto.name}}()</td>
+                <td>
+                  {%ifequal meto.scope "private"%}
+                  -
+                  {%endifequal%}
+                  {%ifequal meto.scope "public"%}
+                  +
+                  {%endifequal%}
+                  {%ifequal meto.scope "protected"%}
+                  #
+                  {%endifequal%}
+
+                  {{meto.type}} {{meto.name}}()</td>
               </tr>
               {%endfor%}
             </table>

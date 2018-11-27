@@ -1,26 +1,5 @@
-class Persona {
-    private String nombres;
-    private String apellidos;
-    private int edad;
+class persona{
+ private int persona;
 
-    public String getNombres();
-    public String getApellidos();
-    public int getEdad();
-}
-
-class promedio{
-    private int nota1;
-    private int nota2;
-    private int nota3;
-
-    public int getNota1();
-    public int getNota2();
-    public int getNota3();
-}
-
-class empleado{
-   public int algo;
-   public String esto;
-
-   private int getNombre();
+ public void getpersona();
 }
