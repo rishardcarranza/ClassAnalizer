@@ -19,8 +19,10 @@ from django.conf.urls import url, include
 from compiladores import vistas
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    url(r'^index/$',vistas.index),
+    # path('admin/', admin.site.urls),
+    # url(r'^index/$',vistas.index),
+    url(r'',vistas.procesar),
+    url(r'^index/$',vistas.procesar),
     url(r'^procesar/$',vistas.procesar),
 
 ]

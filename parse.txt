@@ -1,5 +1,3 @@
-class persona{
- private int persona;
-
- public void getpersona();
+class Nombre {
+private String nombre;
 }

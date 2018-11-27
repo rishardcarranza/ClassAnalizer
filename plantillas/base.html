@@ -1,185 +1,130 @@
-<!doctype html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>        
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
-    <title>Generador de UMLS de clases</title>
-    <script type="text/javascript">
-
-      /*window.onload = function() {
-        var canvas = document.getElementById("linea1");
-          if (canvas && canvas.getContext) {
-          var ctx = canvas.getContext("2d");
-            if (ctx) {
-              ctx.lineWidth = 3;
-              ctx.strokeStyle = "#11131A";
-              ctx.beginPath();
-              ctx.moveTo(90, 130);
-              ctx.lineTo(90, 20);
-              ctx.stroke();
-            }
-          }
-      }*/
-
-      function draw() {
-        var canvas = document.getElementById("linea1");
-        if (canvas.getContext){
-          var ctx = canvas.getContext("2d");
-          var ctx2 = canvas.getContext("2d");
-
-          // Triángulo rellenado
-          ctx.beginPath();
-          ctx.moveTo(82,0);
-          ctx.lineTo(95,10);
-          ctx.lineTo(70,10);
-          ctx.fill();
-
-          ctx.lineWidth = 2;
-          ctx.strokeStyle = "#11131A";
-          ctx.beginPath();
-          ctx.moveTo(82, 150);
-          ctx.lineTo(82, 10);
-          ctx.stroke();
-
-
-        /*  // Triángulo contorneado
-          ctx.beginPath();
-          ctx.moveTo(125,125);
-          ctx.lineTo(125,45);
-          ctx.lineTo(45,125);
-          ctx.closePath();
-          ctx.stroke();*/
-        }
-      }
-    </script>
-
+    <title>Analizador Lexico/Sintactico y diagramador de Clases</title>
     <style type="text/css">
-      textarea {
+        /* textarea {
         resize: none;
-      }
+        }
 
-      #uml {
+        #uml {
         border-style: solid;
         height: 509px;
         overflow: auto;
-      }
+        }
 
-      #main {
+        #main {
         padding-top: 75px;
-      }
+        }
 
-      #error {
-         color: red;
-      }
+        #error {
+        color: red;
+        }
 
-      table tr {
-         text-align: center;
-      }
-
+        table tr {
+        text-align: center;
+        } */
     </style>
-
-
-  </head>
-  <body onload="draw();">
-
-    <div class="container" id="main">
-      <div class="row">
-        <div class="col-12 col-md-8">
-
-
-          <form action="/procesar/" method="get">
-            <textarea name="textarea" rows="25" cols="100">{{text}}</textarea>
-            <center><input type="submit" value="Procesar"></center>
-          </form>
-
-          {% if not estado %}
-            {%for erro in errores%}
-              <p id="error">{{erro}}</p>
-            {%endfor%}
-          {% endif %}
+</head>
+<body">
+<div class="container-fluid">
+    <h1 class="mb-5 mt-3 text-center">Analizador Lexico/Sintactico y Diagramador de Clases</h1>
+    <div class="row justify-content-md-center">
+        <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-success text-white">Definición de la Clase con código</div>
+            <div class="card-body">
+            <form action="/procesar/" method="get" class="form-inline">
+                <div class="form-group">
+                    <textarea class="form-control col-md-8" name="textarea" rows="15" cols="75">{{text}}</textarea>
+                    <input class="btn btn-primary offset-md-1 col-md-3" type="submit" value="Procesar">
+                </div>                
+            </form>
+            </div>
         </div>
 
-        <div class="col-6 col-md-4" id="uml">
-
-            {%if estado%}
-
-          {%for dic in clases%}
-            <center>
-            <table border="collapse">
-              <tr>
-                <td bgcolor="yellow"><strong><center><h3>Class {{dic.name}}</h3></center></strong></td>
-              </tr>
-              <tr>
-                <td bgcolor="silver"><strong><center>Atributos</center></strong></td>
-              </tr>
-              {%for atr in dic.lstAttributes%}
-              <tr>
-                <td>
-                  {%ifequal atr.scope "private"%}
-                  -
-                  {%endifequal%}
-                  {%ifequal atr.scope "public"%}
-                  +
-                  {%endifequal%}
-                  {%ifequal atr.scope "protected"%}
-                  #
-                  {%endifequal%}
-
-                  {{atr.type}} {{atr.name}}</td>
-              </tr>
-              {%endfor%}
-
-              <tr>
-                <td bgcolor="silver"><strong><center>Metodos</center></strong></td>
-              </tr>
-
-              {%for meto in dic.lstMethods%}
-              <tr>
-                <td>
-                  {%ifequal meto.scope "private"%}
-                  -
-                  {%endifequal%}
-                  {%ifequal meto.scope "public"%}
-                  +
-                  {%endifequal%}
-                  {%ifequal meto.scope "protected"%}
-                  #
-                  {%endifequal%}
-
-                  {{meto.type}} {{meto.name}}()</td>
-              </tr>
-              {%endfor%}
-            </table>
-            </center>
-           <br>
+            {% if not estado %}
+            {%for erro in errores%}
+            <p id="error">{{erro}}</p>
             {%endfor%}
+            {% endif %}
+        </div>
+
+        <div class="col-md-5" id="uml">
+            <div class="card">
+                <div class="card-header bg-success text-white">Diagrama de Clase en UML</div>
+                <div class="card-body">
+                    {%if estado%}
+
+                        {%for dic in clases%}
+                        <table border="collapse">
+                            <tr>
+                                <td bgcolor="yellow"><h3>Class {{dic.name}}</h3></td>
+                            </tr>
+                            <tr>
+                                <td bgcolor="silver"><strong>Atributos</strong></td>
+                            </tr>
+                            {%for atr in dic.lstAttributes%}
+                            <tr>
+                                <td>
+                                {%ifequal atr.scope "private"%}
+                                -
+                                {%endifequal%}
+                                {%ifequal atr.scope "public"%}
+                                +
+                                {%endifequal%}
+                                {%ifequal atr.scope "protected"%}
+                                #
+                                {%endifequal%}
+
+                                {{atr.type}} {{atr.name}}
+                                </td>
+                            </tr>
+                            {%endfor%}
+                            <tr>
+                                <td bgcolor="silver"><strong>Metodos</strong></td>
+                            </tr>
+
+                            {%for meto in dic.lstMethods%}
+                            <tr>
+                                <td>
+                                {%ifequal meto.scope "private"%}
+                                -
+                                {%endifequal%}
+                                {%ifequal meto.scope "public"%}
+                                +
+                                {%endifequal%}
+                                {%ifequal meto.scope "protected"%}
+                                #
+                                {%endifequal%}
+
+                                {{meto.type}} {{meto.name}}()
+                                </td>
+                            </tr>
+                            {%endfor%}
+                        </table>
+                        <br>
+                        {%endfor%}
 
 
-            {% endif%}
-
-            <!--<center><canvas id="linea1" width="140" height="100">Su navegador no soporta canvas :( </canvas></center> -->
-
-
-
-
-    </div>
-
-
-
-
-
+                    {% endif%}
+                </div> <!-- End div.card-body  -->
+        </div>
+    </div> <!-- End div.row  -->
+</div> <!-- End div.container-fluid  -->
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="js/bootstrap.min.js"></script>
-  </body>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
 </html>
