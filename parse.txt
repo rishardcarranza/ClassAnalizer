@@ -1,3 +1,4 @@
-class Nombre {
-private String nombre;
+class Persona {
+privat string nombre
+private string apellido;
 }
