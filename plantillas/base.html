@@ -8,6 +8,8 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
 
     <title>Analizador Lexico/Sintactico y diagramador de Clases</title>
 </head>
@@ -21,7 +23,8 @@
             <div class="card-body">
             <form action="/procesar/" method="get">
                 <div class="form-group col-md-12">
-                    <input class="btn btn-outline-primary" type="submit" value="Procesar">
+                    <input class="btn btn-primary" type="submit" value="Procesar">
+                    <button id="btnClear" type="button" class="btn btn-light">Cargar Ejemplo</button>
                     <button id="btnClear" type="button" class="btn btn-light">Limpiar</button>
                 </div>
                     <hr />
@@ -37,14 +40,19 @@
                 <div class="card-header bg-success text-white">Diagrama de Clase en UML</div>
                 <div class="card-body">
                     {%if estado%}
-
+                    <div class="container">
+                        <div class="row">
                         {%for dic in clases%}
-                        <table border="collapse">
-                            <tr>
-                                <td bgcolor="yellow"><h3>Class {{dic.name}}</h3></td>
+                        <div class="col-sm-5 animated zoomIn bounceIn">
+                        <table class="table table-sm table-bordered shadow p-3 mb-4 rounded">
+                            <thead>
+                            <tr class="text-light bg-dark text-center">
+                                <th>Clase {{dic.name}}</th>
                             </tr>
+                            </thead>
+                            <tbody>
                             <tr>
-                                <td bgcolor="silver"><strong>Atributos</strong></td>
+                                <td><strong>Atributos</strong></td>
                             </tr>
                             {%for atr in dic.lstAttributes%}
                             <tr>
@@ -64,7 +72,7 @@
                             </tr>
                             {%endfor%}
                             <tr>
-                                <td bgcolor="silver"><strong>Metodos</strong></td>
+                                <td><strong>Metodos</strong></td>
                             </tr>
 
                             {%for meto in dic.lstMethods%}
@@ -84,10 +92,12 @@
                                 </td>
                             </tr>
                             {%endfor%}
+                            </tbody>
                         </table>
-                        <br>
+                        </div>
                         {%endfor%}
-
+                        </div>
+                    </div>
 
                     {% endif%}
                 </div> <!-- End div.card-body  -->

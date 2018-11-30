@@ -4,28 +4,4 @@ private String apellido;
 
 public String getNombre();
 public String getApellido();
-}
-
-class Persona {
-private String nombre;
-private String apellido;
-
-public String getNombre();
-public String getApellido();
-}
-
-class Persona {
-private String nombre;
-private String apellido;
-
-public String getNombre();
-public String getApellido();
-}
-
-class Persona {
-private String nombre;
-private String apellido;
-
-public String getNombre();
-public String getApellido();
-}
+}
