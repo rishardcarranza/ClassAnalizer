@@ -21,15 +21,15 @@
         <div class="card">
             <div class="card-header bg-success text-white">Definición de la Clase con código</div>
             <div class="card-body">
-            <form action="/procesar/" method="get">
+            <form action="/procesar/" method="POST">
                 <div class="form-group col-md-12">
-                    <input class="btn btn-primary" type="submit" value="Procesar">
-                    <button id="btnClear" type="button" class="btn btn-light">Cargar Ejemplo</button>
+                    <input id="btnProcess" class="btn btn-primary" type="submit" value="Procesar">
+                    <button id="btnExample" type="button" class="btn btn-light">Cargar Ejemplo</button>
                     <button id="btnClear" type="button" class="btn btn-light">Limpiar</button>
                 </div>
                     <hr />
                 <div class="form-group col-md-12">
-                    <textarea class="form-control col-md-12" name="textarea" rows="15">{{text}}</textarea>
+                    <textarea id="txtClasses" class="form-control col-md-12" name="txtClasses" rows="15" wrap="hard">{{text}}</textarea>
                 </div>
             </form>
             </div>
@@ -125,5 +125,18 @@
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script>
+    $(document).ready(function() {
+        $btnProcess = $("#btnProcess");
+        $btnExample = $("#btnExample");
+        $btnClear = $("#btnClear");
+        $txtClasses = $("#txtClasses");
+
+        $btnClear.click(function() {
+            $txtClasses.val("");
+            $txtClasses.focus();
+        });
+    });
+    </script>
 </body>
 </html>
