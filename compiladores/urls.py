@@ -23,6 +23,7 @@ urlpatterns = [
     # url(r'^index/$',vistas.index),
     url(r'',vistas.procesar),
     url(r'^index/$',vistas.procesar),
-    url(r'^procesar/$',vistas.procesar),
+    url(r'^analyzer/$',vistas.procesar),
+    url(r'^example/$',vistas.loadExample),
 
 ]

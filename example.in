@@ -1,0 +1,9 @@
+class Persona {
+private String nombres;
+private String apellidos;
+private int edad;
+
+public String getNombres();
+public String getApellidos();
+public int getEdad();
+}
