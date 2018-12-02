@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link rel="icon" type="image/png" href="{% static 'images/code.png' %}">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <!-- Animate CSS -->
@@ -24,7 +24,7 @@
             <form id="frmAnalyzer" action="/analyzer/" method="POST" class="needs-validation" novalidate>
                 <div class="form-group col-md-12">
                     <button id="btnProcess" type="submit" class="btn btn-primary">Procesar</button>
-                    <button id="btnExample" type="button" class="btn btn-light">Cargar Ejemplo</button>
+                    {% comment %} <button id="btnExample" type="button" class="btn btn-light">Cargar Ejemplo</button> {% endcomment %}
                     <button id="btnClear" type="button" class="btn btn-light">Limpiar</button>
                 </div>
                     <hr />
@@ -43,10 +43,10 @@
             <div class="card h-100">
                 <div class="card-header bg-success text-white">Diagrama de Clase en UML</div>
                 <div class="card-body">
-                    {%if estado%}
+                    {% if estado %}
                     <div class="container">
                         <div class="row">
-                        {%for dic in clases%}
+                        {% for dic in clases %}
                         <div class="col-sm-5 animated zoomIn bounceIn">
                         <table class="table table-sm table-bordered shadow p-3 mb-4 rounded">
                             <thead>
@@ -58,51 +58,51 @@
                             <tr>
                                 <td><strong>Atributos</strong></td>
                             </tr>
-                            {%for atr in dic.lstAttributes%}
+                            {% for atr in dic.lstAttributes %}
                             <tr>
                                 <td>
-                                {%ifequal atr.scope "private"%}
+                                {% ifequal atr.scope "private" %}
                                 -
-                                {%endifequal%}
-                                {%ifequal atr.scope "public"%}
+                                {% endifequal%}
+                                {% ifequal atr.scope "public" %}
                                 +
-                                {%endifequal%}
-                                {%ifequal atr.scope "protected"%}
+                                {% endifequal%}
+                                {% ifequal atr.scope "protected" %}
                                 #
-                                {%endifequal%}
+                                {% endifequal%}
 
                                 {{atr.type}} {{atr.name}}
                                 </td>
                             </tr>
-                            {%endfor%}
+                            {% endfor %}
                             <tr>
                                 <td><strong>Metodos</strong></td>
                             </tr>
 
-                            {%for meto in dic.lstMethods%}
+                            {% for meto in dic.lstMethods %}
                             <tr>
                                 <td>
-                                {%ifequal meto.scope "private"%}
+                                {% ifequal meto.scope "private" %}
                                 -
-                                {%endifequal%}
-                                {%ifequal meto.scope "public"%}
+                                {% endifequal %}
+                                {% ifequal meto.scope "public" %}
                                 +
-                                {%endifequal%}
-                                {%ifequal meto.scope "protected"%}
+                                {% endifequal %}
+                                {% ifequal meto.scope "protected" %}
                                 #
-                                {%endifequal%}
+                                {% endifequal %}
 
                                 {{meto.type}} {{meto.name}}()
                                 </td>
                             </tr>
-                            {%endfor%}
+                            {% endfor %}
                             </tbody>
                         </table>
                         </div>
-                        {%endfor%}
+                        {% endfor %}
                         </div>
                     </div>
-                    {% endif%}
+                    {% endif %}
                 </div> <!-- End div.card-body  -->
             </div> <!-- End div.card  -->
         </div> <!-- End div.col-md-5  -->
@@ -112,9 +112,9 @@
             {% if not estado and errores %}
             <div class="alert alert-danger" role="alert">
                 <ul>
-                {%for erro in errores%}
+                {% for erro in errores %}
                     <li>{{erro}}</li>
-                {%endfor%}
+                {% endfor %}
                 </ul>
             </div>
             {% endif %}
@@ -128,11 +128,12 @@
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
     <script type="text/javascript">
     $(document).ready(function() {
         $frmAnalyzer = $("#frmAnalyzer");
         $btnProcess = $("#btnProcess");
-        $btnExample = $("#btnExample");
+        // $btnExample = $("#btnExample");
         $btnClear = $("#btnClear");
         $txtClasses = $("#txtClasses");
 
@@ -141,18 +142,6 @@
             $txtClasses.val("");
             $txtClasses.focus();
         });
-
-        // To load the class content by file on textarea input
-        $btnExample.click(function() {
-            $txtClasses.val("");
-            $.post("/example/", "", function (data) {
-                // alert("Connect View!");
-                console.log(data)
-                //if (data != "")
-                    // location.reload();
-            });
-        });
-
 
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
         var forms = document.getElementsByClassName('needs-validation');
