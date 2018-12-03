@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 import json
 import ply.yacc as yacc
-from lexAnalyzer import *
+from .lexAnalyzer import *
 from models.MainClass import *
 from models.Attribute import *
 from models.Method import *
