@@ -24,7 +24,7 @@
             <form id="frmAnalyzer" action="/analyzer/" method="POST" class="needs-validation" novalidate>
                 <div class="form-group col-md-12">
                     <button id="btnProcess" type="submit" class="btn btn-primary">Procesar</button>
-                    {% comment %} <button id="btnExample" type="button" class="btn btn-light">Cargar Ejemplo</button> {% endcomment %}
+                    <button id="btnExample" type="button" class="btn btn-light">Cargar Ejemplo</button>
                     <button id="btnClear" type="button" class="btn btn-light">Limpiar</button>
                 </div>
                     <hr />
@@ -44,7 +44,7 @@
                 <div class="card-header bg-success text-white">Diagrama de Clase en UML</div>
                 <div class="card-body">
                     {% if estado %}
-                    <div class="container">
+                    <div class="container" id="cntUML">
                         <div class="row">
                         {% for dic in clases %}
                         <div class="col-sm-5 animated zoomIn bounceIn">
@@ -130,17 +130,44 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     
     <script type="text/javascript">
+    var example = `class Persona {
+    private String nombres;
+    private String apellidos;
+    private int edad;
+
+    public String getNombres();
+    public String getApellidos();
+    public int getEdad();
+}
+
+class Evaluacion {
+    private int nota1;
+    private int nota2;
+    private int nota3;
+
+    public int getNota1();
+    public int getNota2();
+    public int getNota3();
+}`;
+
     $(document).ready(function() {
         $frmAnalyzer = $("#frmAnalyzer");
         $btnProcess = $("#btnProcess");
-        // $btnExample = $("#btnExample");
+        $btnExample = $("#btnExample");
         $btnClear = $("#btnClear");
         $txtClasses = $("#txtClasses");
+        $cntUML = $("#cntUML");
 
         // To clear the textarea input and set focus
         $btnClear.click(function() {
             $txtClasses.val("");
             $txtClasses.focus();
+            $cntUML.remove();
+        });
+
+        // To load example class
+        $btnExample.click(function() {
+            $txtClasses.val(example);
         });
 
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
